@@ -15,7 +15,8 @@
   juxt.dirwatch
   (:import (java.io File)
            (java.nio.file FileSystems StandardWatchEventKinds WatchService Path)
-           (java.util.concurrent TimeUnit)))
+           (java.util.concurrent TimeUnit)
+           (com.sun.nio.file SensitivityWatchEventModifier))
 
 ;; TODO: Implement a version that uses polling to emulate this functionality on JDK6 and below.
 
@@ -29,7 +30,8 @@
               (type StandardWatchEventKinds/ENTRY_CREATE)
               [StandardWatchEventKinds/ENTRY_CREATE
                StandardWatchEventKinds/ENTRY_DELETE
-               StandardWatchEventKinds/ENTRY_MODIFY]))
+               StandardWatchEventKinds/ENTRY_MODIFY])
+         SensitivityWatchEventModifier/HIGH)
   (doseq [dir (.. path toAbsolutePath toFile listFiles)]
     (when (. dir isDirectory)
           (register-path ws (. dir toPath) event-atom))
